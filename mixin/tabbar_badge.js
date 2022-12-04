@@ -14,5 +14,10 @@ export default {
 				text: this.totalCart + ""
 			})
 		}
+	},
+	watch: {
+		totalCart() {
+			this.setBadge()
+		}
 	}
 }

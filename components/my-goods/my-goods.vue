@@ -7,7 +7,7 @@
 		<!-- 
 			商品封面
 		-->
-		<view class="goods_item_cover">
+		<view class="goods_item_cover" @click="gotoDetailPage(goods)">
 			<image :src="goods.goods_small_logo || defaultPicArr[Math.floor(Math.random() * defaultPicArr.length)]" class="goods_img" mode=""></image>
 		</view>
 		<!-- 
@@ -23,6 +23,12 @@
 			-->
 			<view class="goods_info">
 				<view class="goods_price"><text class="icon">￥</text>{{ goods.goods_price | toFixed }}</view>
+				<!--
+						商品数字输入框
+					-->
+				<view class="goods_number_input_box">
+					<uni-number-box :min="1" :value="goods.goods_count" @change="numChangeHandler" v-if="showNum"/>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -40,6 +46,10 @@
 				type: Boolean,
 				default: false
 			},
+			showNum: {
+				type: Boolean,
+				default: false
+			}
 		},
 		data() {
 			return {
@@ -63,12 +73,24 @@
 			}
 		},
 		methods: {
+			gotoDetailPage(goods) {
+				uni.navigateTo({
+					url: '/subpkg/goods_detail/goods_detail?goods_id=' + goods.goods_id
+				})
+			},
 			radioClickHandler() {
 				this.$emit('radio-change', {
 					goods_id: this.goods.goods_id,
 					goods_state: !this.goods.goods_state
 				})
 			},
+			numChangeHandler(val) {
+				console.log(val)
+				this.$emit('num-change', {
+					goods_id: this.goods.goods_id,
+					goods_count: +val
+				})
+			}
 		}
 	}
 </script>

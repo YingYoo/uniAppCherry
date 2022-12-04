@@ -3,10 +3,34 @@
 		空购物车显示
 	-->
 	<view class="cart_empty" v-if="!cart.length">
-		<text class="cart_empty_text">什么? 你的购物车竟然一件商品都没有啊? </text>
+		<view class="cart_empty_img">
+			<image src="../../static/cart_empty@2x.png"></image>
+		</view>
+		<text class="cart_empty_text">空空如也~</text>
 	</view>
+
 	
 	<view class="container" v-else>
+		
+		<!-- <view>
+			<uni-popup ref="popup" type="dialog">
+				<uni-popup-dialog content="确定删除该商品吗?" :duration="2000" :before-close="true" @open="open" @close="close" @confirm="confirm"></uni-popup-dialog>
+			</uni-popup>
+		</view> -->
+		
+		<!-- 
+			购物车标题
+		-->
+		<view class="cart_title">
+			<!-- 
+				左侧图标
+			-->
+			<uni-icons type="shop" size="20"></uni-icons>
+			<!-- 
+				描述
+			-->
+			<text class="cart_title_text">购物车</text>
+		</view>
 		<!-- 
 			购物车列表
 		-->
@@ -14,53 +38,41 @@
 			<!--
 				购物车列表项
 			-->
-			<view 
+			<uni-swipe-action>
+				<view
 				class="cart_goods_item"
-				v-for="(goods, i) in cart"
-				:key="i"			
-			>
-				<my-goods :goods="goods" :show-radio="true" @radio-change="radioChangeHandler"></my-goods>	
-					<!-- 
-						商品数字输入框
-					-->
-				<view class="goods_number_input_box">
-					<uni-number-box @change="changeValue" />
+					v-for="(goods, i) in cart"
+					:key="i"			
+				>
+					<uni-swipe-action-item :right-options="options" @click="swipeActionClickHandler(goods)">
+						<my-goods :goods="goods" :show-radio="true" :show-num="true" @radio-change="radioChangeHandler" @num-change="numChangeHandler"></my-goods>	
+					</uni-swipe-action-item>
 				</view>
-			</view>
+			</uni-swipe-action>
 		</view>
-		<!-- 
-			底部合计
-		-->
-		<view class="goods_total">
-			<view class="goods_total_radio">
-				<radio :checked="true" color="#c00000"></radio><text>全选</text>
-			</view>
-			<!-- 
-				合计
-			-->
-			<view class="total_text">
-				<text>合计: </text>
-				<text class="icon">￥</text><text class="goods_tootal_number"></text>
-			</view>
-			<!-- 
-				结算
-			-->
-			<view class="total_btn">
-				<text>结算<text>({{ checkedCount }})</text></text>
-			</view>
+			
+		<view>
+			<my-settle></my-settle>
 		</view>
+		
 	</view>
 </template>
 
 <script>
 	
-	import { mapState, mapMutations, mapGetters } from "vuex"
+	import { mapState, mapMutations, } from "vuex"
 	import badgeMix from "@/mixin/tabbar_badge.js"
 	
 	export default {
 		mixins: [badgeMix],
 		data() {
 			return {
+				options: [{
+					text: "删除",
+					style: {
+						backgroundColor: "#c00000"
+					}
+				}],
 				defaultPicArr: [
 					'https://img1.baidu.com/it/u=3628940774,3758562637&fm=253&fmt=auto&app=138&f=PNG?w=504&h=500',
 					'https://img2.baidu.com/it/u=4209974587,3841752014&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500',
@@ -76,29 +88,25 @@
 			};
 		},
 		methods: {
-			...mapMutations("Cart", ["updateCartGoodsState"]),
-			change(value) {
-				this.numberValue = value
-			},
-			changeValue(value) {
-				console.log('返回数值：', value);
-			},
-			blur(e) {
-				console.log('blur:', e);
-			},
-			focus(e) {
-				console.log('focus:', e);
-			},
+			...mapMutations("Cart", ["updateCartGoodsState", "updateCartGoodsCount", "removeCartGoodsById"]), 
 			gotoDetailPage(item) {
 				console.log(item)
 				uni.navigateTo({
 					url: '/subpkg/goods_detail/goods_detail?goods_id=' + item.goods_id
 				})
 			},
+			// 商品勾选状态发生变化
 			radioChangeHandler(e) {
-				console.log(e)
 				this.updateCartGoodsState(e)
-			}
+			},
+			// 商品的数量发生变化
+			numChangeHandler(e) {
+				this.updateCartGoodsCount(e)
+			},
+			// 点击滑动取消按钮
+			swipeActionClickHandler(goods) {
+				this.removeCartGoodsById(goods.goods_id)
+			},
 		},
 		filters: {
 			toFixed(num) {
@@ -106,8 +114,7 @@
 			}
 		},
 		computed: {
-			...mapState("Cart", ["cart"]),
-			...mapGetters("Cart", ["checkedCount"])
+			...mapState("Cart", ["cart"])
 		}
 	}
 </script>
@@ -118,36 +125,65 @@
 	*/
 	.cart_empty { 
 		display: flex;
+		flex-direction: column;
 		justify-content: center;
 		align-items: center;
 		width: 100%;
 		height: 100vh;
+		/*
+			cart_empty_img
+		*/
+		.cart_empty_img {
+			width: 100px;
+			height: 100px;
+			image{ display: block; width: 100%; height: 100%; }
+		}
+		/*
+			cart_empty_text
+		*/
+		.cart_empty_text{ 
+			margin-top: 20rpx;
+			font-size: 13px;
+			color: gray;
+		}
 	}
 	
 	.container { 
-		margin: 15rpx;
-		
+		margin: 0 15rpx 15rpx;
+		/* 
+			cart_title
+		*/
+		.cart_title{
+			z-index: 999;
+			display: flex;
+			align-items: center;
+			position: sticky;
+			top: 0;
+			margin: 0 0 15rpx 0;
+			padding-left: 5px;
+			height: 40px;
+			font-size: 14px;
+			border-bottom: 1px solid #bbb;
+			background-color: var(--greyLight-1);
+			/*
+				cart_title_text
+			*/
+			.cart_title_text {
+				margin-left: 5px;
+			}
+		}
 		.cart_goods_list {
 			display: flex;
 			flex-direction: column;
 			gap: 10rpx;
+			padding-bottom: 50px;
 			border-radius: 10px;
 			
 			
 			.cart_goods_item { 
-				position: relative; 
+				margin-bottom: 15rpx;
 				border-radius: 20rpx;
 				box-shadow: .3rem .3rem .6rem #d0d0d0, -.2rem -.2rem .5rem var(--white);
-				
-				.goods_number_input_box {
-					position: absolute;
-					right: 10px;
-					bottom: 10px;
-					
-					/deep/.uni-numbox-btns.data-v-dd94a2a8{ width: 10px; }
-					/deep/.uni-numbox__minus.data-v-dd94a2a8{ border-radius: 7px 0 0 7px; }
-					/deep/.uni-numbox__plus.data-v-dd94a2a8 { border-radius: 0 7px 7px 0; } 
-				}
 			}
 			/**----------
 			* goods_item
@@ -155,10 +191,11 @@
 			/deep/.goods_item { 
 				display: flex;
 				flex-direction: row;
-				margin-bottom: 10rpx;
+				align-items: center;
+				box-sizing: border-box;
 				padding: 15rpx;
 				
-				.goods_radio{ margin: 35px 10rpx 0 0; }
+				.goods_radio{ margin-right: 10rpx; }
 				/**----------------
 				* goods_item_cover
 				-----------------*/
@@ -191,6 +228,18 @@
 						line-height: 1.5;
 						font-weight: 600;
 					}
+					/* 
+						goods_info
+					*/
+					.goods_info{
+						display: flex;
+						justify-content: space-between;
+						.goods_number_input_box {
+							.uni-numbox-btns.data-v-dd94a2a8{ width: 10px; }
+							.uni-numbox__minus.data-v-dd94a2a8{ border-radius: 5px 0 0 5px; }
+							.uni-numbox__plus.data-v-dd94a2a8 { border-radius: 0 5px 5px 0; } 
+						}
+					}
 					.goods_price {
 						font-size: 18px;
 						color: #c00000;
@@ -199,34 +248,6 @@
 						.icon{font-weight: normal; font-size: 14px}
 					}
 				}
-			}
-		}
-		
-		.goods_total{
-			z-index: 999;
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			position: fixed;
-			left: 0;
-			bottom: 0;
-			padding: 5rpx 20rpx;
-			width: 100%;
-			height: 50px;
-			border-top: 1px solid #ccc;
-			
-			.goods_total_radio { 
-				display: flex;
-				align-items: center;
-			}
-			// 结算
-			.total_btn{
-				min-width: 120px;
-				height: 100%;
-				line-height: 50px;
-				text-align: center;
-				color: #fff;
-				background-color: #c00000;
 			}
 		}
 	}
