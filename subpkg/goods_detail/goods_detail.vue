@@ -35,7 +35,7 @@
 						<text class="goods_favo_text">收藏</text>
 					</view> 
 					<!-- 运费 -->
-					<view class="goods_yf">快递: 免运费--{{ cart.length }}</view>
+					<view class="goods_yf">快递: 免运费</view>
 				</view>
 			</view>
 		</view>

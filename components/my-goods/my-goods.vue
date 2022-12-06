@@ -85,7 +85,7 @@
 				})
 			},
 			numChangeHandler(val) {
-				console.log(val)
+				// console.log(val)
 				this.$emit('num-change', {
 					goods_id: this.goods.goods_id,
 					goods_count: +val

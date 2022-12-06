@@ -18,6 +18,13 @@
 			</uni-popup>
 		</view> -->
 		
+		
+		<!-- 
+			收货地址区域
+		-->
+		<view class="my_address">
+			<my-address></my-address>
+		</view>
 		<!-- 
 			购物车标题
 		-->
@@ -90,7 +97,6 @@
 		methods: {
 			...mapMutations("Cart", ["updateCartGoodsState", "updateCartGoodsCount", "removeCartGoodsById"]), 
 			gotoDetailPage(item) {
-				console.log(item)
 				uni.navigateTo({
 					url: '/subpkg/goods_detail/goods_detail?goods_id=' + item.goods_id
 				})
@@ -149,7 +155,7 @@
 	}
 	
 	.container { 
-		margin: 0 15rpx 15rpx;
+		margin: 0;
 		/* 
 			cart_title
 		*/
@@ -170,12 +176,14 @@
 			*/
 			.cart_title_text {
 				margin-left: 5px;
+				text-shadow: 0 0 1px #888;
 			}
 		}
 		.cart_goods_list {
 			display: flex;
 			flex-direction: column;
 			gap: 10rpx;
+			margin: 0 15rpx;
 			padding-bottom: 50px;
 			border-radius: 10px;
 			

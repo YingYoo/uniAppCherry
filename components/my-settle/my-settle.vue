@@ -13,7 +13,7 @@
 				合计
 			-->
 			<view class="total_text">
-				<text>合计: </text>
+				<text>合计：</text>
 				<text class="icon">￥</text><text class="goods_tootal_number">{{ checkedGoodsAmount }}</text>
 			</view>
 			<!-- 
@@ -73,6 +73,7 @@
 		line-height: 50px;
 		border-top: 1px solid #ccc;
 		background-color: var(--greyLight-1);
+		text-shadow: 0 0 1px #888;
 		
 		.icon { font-size: 14px; font-weight: normal; color: #c00000; }
 		.goods_tootal_number {

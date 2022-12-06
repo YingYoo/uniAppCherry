@@ -108,8 +108,6 @@
 			},
 			// 清空历史记录
 			clearHistorys() {
-				console.log(1111)
-				console.log(this.$refs)
 				this.$refs.popup.open()
 			},
 			close() {
