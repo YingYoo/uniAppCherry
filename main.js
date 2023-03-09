@@ -1,8 +1,4 @@
 import App from './App'
-import MySearch from './components/my-search/my-search.vue'
-Vue.component('my-search', MySearch)
-import MyGoods from './components/my-goods/my-goods.vue'
-Vue.component('my-goods', MyGoods)
 // 按需导入 $http 对象
 import { $http } from '@escook/request-miniprogram'
 // 引入store
@@ -19,6 +15,11 @@ $http.beforeRequest = function (options) {
 	wx.showLoading({
 	  title: '数据加载中...',
 	})
+	if(options.url.indexOf("/my/") !== -1) {
+		options.header = {
+			Authorization: store.state.User.token
+		}
+	}
 }
 
 // 响应拦截器

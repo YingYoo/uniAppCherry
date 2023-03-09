@@ -34,7 +34,7 @@ export default {
 				findResult.goods_count = goods.goods_count
 				this.commit("Cart/saveLocalStorage")
 			}
-		},
+		}, 
 		updateCartAllGoodsState(state, newState) {
 			state.cart.forEach(x => x.goods_state = newState)
 			this.commit("Cart/saveLocalStorage")

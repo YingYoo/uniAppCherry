@@ -47,7 +47,7 @@
 			-->
 			<uni-swipe-action>
 				<view
-				class="cart_goods_item"
+					class="cart_goods_item"
 					v-for="(goods, i) in cart"
 					:key="i"			
 				>
@@ -176,7 +176,6 @@
 			*/
 			.cart_title_text {
 				margin-left: 5px;
-				text-shadow: 0 0 1px #888;
 			}
 		}
 		.cart_goods_list {
@@ -189,8 +188,9 @@
 			
 			
 			.cart_goods_item { 
-				margin-bottom: 15rpx;
+				margin-bottom: 20rpx;
 				border-radius: 20rpx;
+				// background-color: #fff;
 				box-shadow: .3rem .3rem .6rem #d0d0d0, -.2rem -.2rem .5rem var(--white);
 			}
 			/**----------
@@ -219,7 +219,6 @@
 						width: 100px;
 						height: 100px;
 						border-radius: 20rpx;
-						box-shadow: .3rem .3rem .6rem #d0d0d0, -.2rem -.2rem .5rem var(--white);
 					}
 				}
 				

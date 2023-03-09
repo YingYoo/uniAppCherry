@@ -53,7 +53,10 @@
         "appid" : "wxffe10e5ed6a622ea",
         "setting" : {
             "urlCheck" : true,
-            "checkSiteMap" : false
+            "checkSiteMap" : false,
+            "postcss" : true,
+            "es6" : true,
+            "minified" : true
         },
         "usingComponents" : true,
         "requiredPrivateInfos" : [ "getLocation", "chooseLocation", "chooseAddress" ],

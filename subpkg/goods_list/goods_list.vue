@@ -24,9 +24,9 @@
 					// 查询商品id
 					cid: '',
 					// 页码值
-					pageNum: 1,
+					pagenum: 1,
 					// 每页显示数据的条数
-					pageSize: 20,
+					pageSize: 10,
 				},
 				goodsList: [],
 				// 商品总数
@@ -40,13 +40,13 @@
 			this.getGoodsList()
 		},
 		onReachBottom() {
-			if(this.goodsData.pageNum * this.goodsData.pageSize >= this.total) return uni.$showMsg('没有更多商品了哦!')
+			if(this.goodsData.pagenum * this.goodsData.pageSize >= this.total) return uni.$showMsg('没有更多商品了哦!')
 			if(this.isLoading) return
-			this.goodsData.pageNum += 1
+			this.goodsData.pagenum += 1
 			 this.getGoodsList()
 		},
 		onPullDownRefresh() {
-			this.goodsData.pageNum = 1
+			this.goodsData.pagenum = 1
 			this.total = 0
 			this.goodsList = []
 			this.getGoodsList(()=> uni.stopPullDownRefresh())
@@ -55,6 +55,7 @@
 			async getGoodsList(cb) {
 				this.isLoading = true
 				const { data:res } = await uni.$http.get('/api/public/v1/goods/search', this.goodsData)
+				console.log(res)
 				if(res.meta.status !== 200) return uni.$showMsg()
 				this.isLoading = false
 				cb && cb()
@@ -91,6 +92,7 @@
 				padding: 15rpx;
 				width: 325rpx;
 				border-radius: 20rpx;
+				background-color: #fff;
 				box-shadow: .3rem .3rem .6rem #d0d0d0, -.2rem -.2rem .5rem var(--white);
 				
 				.goods_radio{ margin: 0; }
@@ -106,7 +108,6 @@
 						margin: 0 20rpx 20rpx 0;
 						width: 100%;
 						height: 162.5px;
-						box-shadow: .3rem .3rem .6rem #d0d0d0, -.2rem -.2rem .5rem var(--white);
 					}
 				}
 				
@@ -116,8 +117,10 @@
 				.goods_name {
 					margin-bottom: 20rpx;
 					font-size: 13px;
-					height: 80px;
 					line-height: 1.5;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+					overflow: hidden;
 				}
 				.goods_price {
 					font-size: 18px;

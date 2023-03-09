@@ -107,18 +107,19 @@
 				uni.setStorageSync('kw', JSON.stringify(this.historyList))
 			},
 			// 清空历史记录
-			clearHistorys() {
-				this.$refs.popup.open()
-			},
-			close() {
-				// TODO 做一些其他的事情，before-close 为true的情况下，手动执行 close 才会关闭对话框
-				// ...
-				this.$refs.popup.close()
-			},
-			confirm() {
-				this.historyList = []
-				uni.setStorageSync('kw', '[]')
-				this.$refs.popup.close()
+			async clearHistorys() {
+				// 询问用户是否清除历史记录
+				const [ err, succ ] = await uni.showModal({
+					title: "提示",
+					content: "确认清空历史记录吗 ? "
+				}).catch(err => err)
+				
+				if(succ && succ.confirm) {
+					// 用户确认操作
+					// 需要清空vuex中的 historyList, kw 
+					this.historyList = []
+					uni.setStorageSync('kw', '[]')
+				}
 			},
 			// 跳转到商品列表
 			gotoGoodsList(kw) {

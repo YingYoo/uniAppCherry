@@ -1,5 +1,5 @@
 <template>
-	<view class="container" v-else>
+	<view class="container">
 		<!-- 
 			top搜素框
 		-->
@@ -205,7 +205,8 @@
 		swiper{
 			height: 375rpx;
 			border-radius: 20px;
-			box-shadow: .3rem .3rem .6rem var(--greyLight-2), -.2rem -.2rem .5rem var(--white);
+			box-shadow: .3rem .3rem .6rem var(--greyLight-2), 
+									-.2rem -.2rem .5rem var(--white);
 			overflow: hidden;
 			.swiper-item,image{
 				width: 100%;

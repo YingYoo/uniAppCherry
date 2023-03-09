@@ -28,7 +28,12 @@
 				<!--
 					选择收货地址的按钮
 				-->
-				<button type="primary" size="mini" class="btnChooseAddress" @click="chooseAddress">请选择收货地址+</button>
+				<button 
+					type="primary" 
+					size="mini" 
+					class="btnChooseAddress" 
+					@click="chooseAddress"
+				>请选择收货地址+</button>
 			</view>
 			
 			<!-- 
@@ -36,6 +41,7 @@
 			-->
 			<view 
 				class="address_info_box"
+				@click="chooseAddress"
 				v-else
 			>
 				<!--
@@ -88,42 +94,41 @@
 				*/
 				const [ err, succ ] = await uni.chooseAddress().catch(err => err)		
 				// 2. 用户成功的选择了收货地址
-				if(err === null && succ.errMsg === "chooseAddress: ok") {
-					console.log(err)
+				if(err === null && succ.errMsg === "chooseAddress:ok") {
 					// 为data里面的	收货地址对象赋值
 					// this.address = succ
 					this.updateAddress(succ)
 				}
 				
-				if(err && (err.errMsg === "chooseAddress: fail auth deny" || err.errMsg === "chooseAddress: fail authorize no response")) {
-					this.reAuth()
-				}
-			},
-			// 调用此方法, 重新授权
-			async reAuth() {
-				// 1. 提示用户对地址进行授权
-				const [ err2, confirmResult ] = await uni.showModal({
-					content: "检测到您没有打开地址权限, 是否去设置打开?",
-					confirmText: "确认",
-					cancelText: "取消"
-				})
+			// 	if(err && (err.errMsg === "chooseAddress: fail auth deny" || err.errMsg === "chooseAddress: fail authorize no response")) {
+			// 		this.reAuth()
+			// 	}
+			// },
+			// // 调用此方法, 重新授权
+			// async reAuth() {
+			// 	// 1. 提示用户对地址进行授权
+			// 	const [ err2, confirmResult ] = await uni.showModal({
+			// 		content: "检测到您没有打开地址权限, 是否去设置打开?",
+			// 		confirmText: "确认",
+			// 		cancelText: "取消"
+			// 	})
 				
-				// 2. 如果弹窗异常, 直接退出
-				if(err2) return
+			// 	// 2. 如果弹窗异常, 直接退出
+			// 	if(err2) return
 				
-				//3. 如果用户点击了 "取消" 按钮, 则提示用户 "您取消了地址授权!"
-				if(confirmResult.cancel) return uni.$showMsg("您取消了地址授权! ")
+			// 	//3. 如果用户点击了 "取消" 按钮, 则提示用户 "您取消了地址授权!"
+			// 	if(confirmResult.cancel) return uni.$showMsg("您取消了地址授权! ")
 				
-				// 4. 如果用户点击了 "确认" 按钮, 则调用uni.openSetting() 方法进入授权页面, 让用户重新授权		
-				if(confirmResult.confirm) return uni.openSetting({
-					// 4.1. 授权结束, 需要对授权的结果进一步判断
-					success: (settingResult) => {
-						// 4.2. 地址授权的值等于 true, 提示用户 "授权成功!"
-						if(settingResult.authSetting["scope.address"]) return uni.$showMsg("授权成功! 请选择地址")
-						// 4.3. 地址授权的值等于 false, 提示用户 "您取消了地址授权! "
-						if(!settingResult.authSetting["scope.address"]) return uni.$showMsg("您取消了地址授权! ")
-					}
-				})
+			// 	// 4. 如果用户点击了 "确认" 按钮, 则调用uni.openSetting() 方法进入授权页面, 让用户重新授权		
+			// 	if(confirmResult.confirm) return uni.openSetting({
+			// 		// 4.1. 授权结束, 需要对授权的结果进一步判断
+			// 		success: (settingResult) => {
+			// 			// 4.2. 地址授权的值等于 true, 提示用户 "授权成功!"
+			// 			if(settingResult.authSetting["scope.address"]) return uni.$showMsg("授权成功! 请选择地址")
+			// 			// 4.3. 地址授权的值等于 false, 提示用户 "您取消了地址授权! "
+			// 			if(!settingResult.authSetting["scope.address"]) return uni.$showMsg("您取消了地址授权! ")
+			// 		}
+			// 	})
 			}
 		},
 		computed: {
@@ -158,7 +163,6 @@
 		*/
 		.address_title_text {
 			margin-left: 5px;
-			text-shadow: 0 0 1px #888;
 		}
 	}
 	.address_main {
@@ -174,8 +178,10 @@
 			height: 100px;
 			
 			.btnChooseAddress{ 
-				border-radius: 15rpx;
-				box-shadow: .3rem .3rem .6rem #d0d0d0, -.2rem -.2rem .5rem var(--white);
+				border-radius: 45rpx;
+				line-height: 35px;
+				background-color: #c00000;
+				box-shadow: .3rem .3rem .6rem #d0d0d0, -.3rem -.3rem .6rem var(--white);
 			}
 		}
 		/* 
@@ -186,7 +192,6 @@
 			flex-direction: column;
 			justify-content: center;
 			font-size: 12px;
-			text-shadow: 0 0 1px #777;
 			border-radius: 20rpx;
 			box-shadow: .3rem .3rem .6rem #d0d0d0, -.2rem -.2rem .5rem var(--white);
 			/*
@@ -216,8 +221,6 @@
 			
 			.row2 {
 				display: flex;
-				justify-content: space-between;
-				align-items: center;
 				margin: 20rpx 15rpx 15rpx;
 				
 				.row2_left {

@@ -24,7 +24,7 @@
 		{
 			"path": "pages/my/my",
 			"style": {
-				"navigationBarTitleText": "我",
+				"navigationBarTitleText": "我的",
 				"enablePullDownRefresh": false
 			}
 		}
@@ -58,7 +58,8 @@
 		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "樱桃优选",
 		"navigationBarBackgroundColor": "#c00000",
-		"backgroundColor": "#eee"
+		"backgroundColor": "#eee",
+		"usingComponents": {}
 	},
 	"tabBar": {
 		"backgroundColor": "#f5f5f5",

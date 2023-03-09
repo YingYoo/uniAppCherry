@@ -134,7 +134,7 @@
 						goods_count: 1
 					}
 					this.addToCart(goods)
-					console.log(goods)
+					// console.log(goods)
 				}
 			}
 		},

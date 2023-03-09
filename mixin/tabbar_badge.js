@@ -9,6 +9,7 @@ export default {
 	},
 	methods: {
 		setBadge() {
+			// 底部tabbar显示徽标
 			uni.setTabBarBadge({
 				index: 2,
 				text: this.totalCart + ""
